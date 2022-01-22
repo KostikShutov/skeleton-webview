@@ -1,0 +1,10 @@
+version: '3'
+services:
+  skeleton-node:
+    build: .
+    image: skeleton-node
+    container_name: skeleton-node-container
+    tty: true
+    working_dir: /skeleton
+    volumes:
+        - .:/skeleton
