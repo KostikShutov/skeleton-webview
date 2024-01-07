@@ -8,6 +8,18 @@
     </div>
     <div class="button-container">
       <span class="p-float-label">
+        <Dropdown
+          v-model="selectedModel"
+          :options="models"
+          optionLabel="name"
+          optionValue="value"
+          class="w-full md:w-14rem"
+        />
+        <label>Модель</label>
+      </span>
+    </div>
+    <div class="button-container">
+      <span class="p-float-label">
         <InputNumber
           v-model="startYaw"
           inputId="startYaw"
@@ -109,6 +121,8 @@ interface Command {
 export default defineComponent({
   data(): {
     coordinatesAsJson: string;
+    selectedModel: string;
+    models: Array<{ name: string; value: string }>;
     startYaw: number | undefined;
     duration: number;
     errorRate: number;
@@ -116,6 +130,11 @@ export default defineComponent({
   } {
     return {
       coordinatesAsJson: "",
+      selectedModel: "normal",
+      models: [
+        { name: "Нормальная", value: "normal" },
+        { name: "Агрессивная", value: "aggressive" },
+      ],
       startYaw: undefined,
       duration: 0.01,
       errorRate: 0.05,
@@ -204,6 +223,7 @@ export default defineComponent({
               body: JSON.stringify({
                 coordinates: fragment,
                 yaw: this.toDegrees(yaw),
+                model: this.selectedModel,
               }),
             }
           );

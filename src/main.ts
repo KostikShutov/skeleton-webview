@@ -14,6 +14,7 @@ import Column from "primevue/column";
 import Textarea from "primevue/textarea";
 import Button from "primevue/button";
 import InputNumber from "primevue/inputnumber";
+import Dropdown from "primevue/dropdown";
 import { createStore } from "vuex";
 import State from "@/store/State";
 import SocketService from "@/services/SocketService";
@@ -91,4 +92,5 @@ createApp(App)
   .component("Textarea", Textarea)
   .component("Button", Button)
   .component("InputNumber", InputNumber)
+  .component("Dropdown", Dropdown)
   .mount("#app");
