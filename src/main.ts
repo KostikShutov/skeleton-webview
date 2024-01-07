@@ -9,8 +9,6 @@ import Badge from "primevue/badge";
 import Slider from "primevue/slider";
 import InlineMessage from "primevue/inlinemessage";
 import Knob from "primevue/knob";
-import TabView from "primevue/tabview";
-import TabPanel from "primevue/tabpanel";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import Textarea from "primevue/textarea";
@@ -88,8 +86,6 @@ createApp(App)
   .component("Slider", Slider)
   .component("InlineMessage", InlineMessage)
   .component("Knob", Knob)
-  .component("TabView", TabView)
-  .component("TabPanel", TabPanel)
   .component("DataTable", DataTable)
   .component("Column", Column)
   .component("Textarea", Textarea)
