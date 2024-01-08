@@ -65,8 +65,14 @@ const store = createStore({
 SocketService.socket
   .timeout(1000)
   .emit("state", (err: unknown, json: string) => {
+    if (err) {
+      console.log("No socket connection");
+      console.error(err);
+
+      return;
+    }
+
     const state: State = JSON.parse(json);
-    console.log(state);
 
     store.state.minAngle = state.minAngle;
     store.state.maxAngle = state.maxAngle;
@@ -74,6 +80,8 @@ SocketService.socket
     store.state.minSpeed = state.minSpeed;
     store.state.maxSpeed = state.maxSpeed;
     store.state.currentSpeed = state.currentSpeed;
+
+    console.log(state);
   });
 
 createApp(App)
