@@ -162,7 +162,7 @@ export default defineComponent({
     sendCommands(): void {
       try {
         const coordinates: Array<Coordinate> = JSON.parse(
-          this.coordinatesAsJson
+          this.coordinatesAsJson,
         );
 
         console.log("Coordinates via json:");
@@ -174,7 +174,7 @@ export default defineComponent({
       }
     },
     doSendCommands(coordinates: Array<Coordinate>): void {
-      let predictedCoordinates: Array<Coordinate> = [];
+      const predictedCoordinates: Array<Coordinate> = [];
 
       const doInitAndGenerate = async () => {
         this.clearCommands();
@@ -192,7 +192,7 @@ export default defineComponent({
         let yaw = this.toRadians(
           this.startYaw === undefined || this.startYaw === null
             ? init.config.yaw
-            : this.startYaw
+            : this.startYaw,
         );
 
         const length: number = init.config.length;
@@ -225,7 +225,7 @@ export default defineComponent({
                 yaw: this.toDegrees(yaw),
                 model: this.selectedModel,
               }),
-            }
+            },
           );
 
           const command: Command = await fragmentResponse.json();
@@ -242,12 +242,17 @@ export default defineComponent({
             fromCoordinate.x += command.speed * Math.cos(yaw) * this.duration;
             fromCoordinate.y += command.speed * Math.sin(yaw) * this.duration;
 
-            yaw +=
-              Math.tan(this.toRadians(command.steering)) *
-              (command.speed / length) *
-              this.duration;
+            if (
+              this.selectedModel === "normal" ||
+              !this.needMoveStraight(yaw, fromCoordinate, toCoordinate)
+            ) {
+              yaw +=
+                Math.tan(this.toRadians(command.steering)) *
+                (command.speed / length) *
+                this.duration;
 
-            yaw = this.normalizeAngle(yaw);
+              yaw = this.normalizeAngle(yaw);
+            }
 
             SocketService.socket.emit("pushCommands", [
               {
@@ -270,7 +275,7 @@ export default defineComponent({
 
             const distance = this.calculateDistance(
               fromCoordinate,
-              toCoordinate
+              toCoordinate,
             );
 
             if (j === this.maxIterations) {
@@ -281,26 +286,17 @@ export default defineComponent({
             }
 
             if (distance <= this.errorRate) {
-              if (i === total) {
-                const nextX =
-                  fromCoordinate.x +
-                  command.speed * Math.cos(yaw) * this.duration;
-
-                const nextY =
-                  fromCoordinate.y +
-                  command.speed * Math.sin(yaw) * this.duration;
-
-                const nextDistance = this.calculateDistance(
-                  {
-                    x: nextX,
-                    y: nextY,
-                  },
-                  toCoordinate
-                );
-
-                if (nextDistance < distance && nextDistance <= this.errorRate) {
-                  continue;
-                }
+              if (
+                i === total &&
+                this.needCloserToNextCoordinate(
+                  fromCoordinate,
+                  toCoordinate,
+                  command.speed,
+                  yaw,
+                  distance,
+                )
+              ) {
+                continue;
               }
 
               console.log("Distance:");
@@ -316,6 +312,34 @@ export default defineComponent({
       };
 
       doInitAndGenerate();
+    },
+    needCloserToNextCoordinate(
+      fromCoordinate: Coordinate,
+      toCoordinate: Coordinate,
+      speed: number,
+      yaw: number,
+      distance: number,
+    ): boolean {
+      const nextDistance = this.calculateDistance(
+        {
+          x: fromCoordinate.x + speed * Math.cos(yaw) * this.duration,
+          y: fromCoordinate.y + speed * Math.sin(yaw) * this.duration,
+        },
+        toCoordinate,
+      );
+
+      return nextDistance < distance && nextDistance <= this.errorRate;
+    },
+    needMoveStraight(
+      currentAngle: number,
+      c1: Coordinate,
+      c2: Coordinate,
+    ): boolean {
+      const targetAngle: number = this.normalizeAngle(
+        Math.atan2(c2.y - c1.y, c2.x - c1.x),
+      );
+
+      return Math.abs(currentAngle - targetAngle) < 0.1;
     },
     calculateDistance(c1: Coordinate, c2: Coordinate): number {
       const deltaX = c2.x - c1.x;
