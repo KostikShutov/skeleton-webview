@@ -16,4 +16,6 @@ export default interface ControlServiceInterface {
   right(): void;
 
   stop(): void;
+
+  forceStop(): void;
 }

@@ -27,6 +27,14 @@
       <div class="col-4 col-offset-4">
         <DirectionArrow v-on:click="backward()" class="pi pi-arrow-down" />
       </div>
+      <div class="col-4">
+        <DirectionArrow
+          v-if="withStop"
+          v-on:click="forceStop()"
+          class="pi pi-power-off"
+        />
+        <DirectionArrow v-else class="pi" />
+      </div>
     </div>
   </div>
 </template>
@@ -71,6 +79,10 @@ export default defineComponent({
 
     stop(): void {
       this.service.stop();
+    },
+
+    forceStop(): void {
+      this.service.forceStop();
     },
   },
 

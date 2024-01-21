@@ -49,7 +49,7 @@ export default class WheelsControlService implements ControlServiceInterface {
       .timeout(1000)
       .emit("state", (err: unknown, json: string) => {
         if (err) {
-          console.log("[Wheels] left (error)");
+          console.error("[Wheels] left", err);
         } else {
           const state: State = JSON.parse(json);
           const currentAngle = state.currentAngle;
@@ -72,7 +72,7 @@ export default class WheelsControlService implements ControlServiceInterface {
       .timeout(1000)
       .emit("state", (err: unknown, json: string) => {
         if (err) {
-          console.log("[Wheels] right (error)");
+          console.error("[Wheels] right", err);
         } else {
           const state: State = JSON.parse(json);
           const currentAngle = state.currentAngle;
@@ -96,6 +96,20 @@ export default class WheelsControlService implements ControlServiceInterface {
     });
 
     console.log("[Wheels] stop");
+  }
+
+  public forceStop(): void {
+    SocketService.socket.emit("purgeCommands", (err: unknown) => {
+      if (err) {
+        console.error("[Wheels] force stop", err);
+      } else {
+        SocketService.socket.emit("pushCommand", {
+          name: "STOP",
+        });
+
+        console.log("[Wheels] force stop");
+      }
+    });
   }
 
   private doTurn(newAngle: number): void {

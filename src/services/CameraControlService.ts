@@ -22,6 +22,7 @@ export default class CameraControlService implements ControlServiceInterface {
     SocketService.socket.emit("pushCommand", {
       name: "CAMERA_UP",
     });
+
     console.log("[Camera] up");
   }
 
@@ -29,6 +30,7 @@ export default class CameraControlService implements ControlServiceInterface {
     SocketService.socket.emit("pushCommand", {
       name: "CAMERA_DOWN",
     });
+
     console.log("[Camera] down");
   }
 
@@ -36,6 +38,7 @@ export default class CameraControlService implements ControlServiceInterface {
     SocketService.socket.emit("pushCommand", {
       name: "CAMERA_LEFT",
     });
+
     console.log("[Camera] left");
   }
 
@@ -43,10 +46,15 @@ export default class CameraControlService implements ControlServiceInterface {
     SocketService.socket.emit("pushCommand", {
       name: "CAMERA_RIGHT",
     });
+
     console.log("[Camera] right");
   }
 
   public stop(): void {
+    throw new Error("Stop is not available for camera");
+  }
+
+  public forceStop(): void {
     throw new Error("Stop is not available for camera");
   }
 }
