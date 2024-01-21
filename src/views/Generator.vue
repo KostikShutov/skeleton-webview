@@ -134,6 +134,7 @@ export default defineComponent({
       models: [
         { name: "Нормальная", value: "normal" },
         { name: "Агрессивная", value: "aggressive" },
+        { name: "Практика", value: "practice" },
       ],
       startYaw: undefined,
       duration: 0.01,
@@ -258,7 +259,7 @@ export default defineComponent({
               {
                 name: "MOVE",
                 steering: -command.steering,
-                speed: command.speed,
+                speed: 60,
                 duration: this.duration,
               },
             ]);
