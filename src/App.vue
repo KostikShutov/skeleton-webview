@@ -1,16 +1,16 @@
 <template>
-  <Menubar :model="items">
-    <template #start>
-      <img
-        alt="logo"
-        :src="require('@/assets/water.jpg')"
-        height="40"
-        class="mr-2"
-      />
-    </template>
-  </Menubar>
   <Card class="mt-2">
-    <template #title>{{ $route.name }}</template>
+    <template #title>
+      <div class="flex align-items-center">
+        <img
+          alt="logo"
+          :src="require('@/assets/water.jpg')"
+          height="40"
+          class="mr-2"
+        />
+        <span>{{ $route.name }}</span>
+      </div></template
+    >
     <template #content>
       <router-view />
     </template>
@@ -26,22 +26,5 @@
 </style>
 
 <script lang="ts">
-export default {
-  data(): { items: Array<{ label: string; icon: string; url: string }> } {
-    return {
-      items: [
-        {
-          label: "Главная",
-          icon: "pi pi-fw pi-car",
-          url: "/",
-        },
-        {
-          label: "Генератор",
-          icon: "pi pi-fw pi-compass",
-          url: "/generator",
-        },
-      ],
-    };
-  },
-};
+export default {};
 </script>

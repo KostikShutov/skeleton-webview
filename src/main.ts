@@ -2,7 +2,6 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 import PrimeVue from "primevue/config";
-import Menubar from "primevue/menubar";
 import Card from "primevue/card";
 import Image from "primevue/image";
 import Badge from "primevue/badge";
@@ -15,6 +14,7 @@ import Textarea from "primevue/textarea";
 import Button from "primevue/button";
 import InputNumber from "primevue/inputnumber";
 import Dropdown from "primevue/dropdown";
+import Tag from "primevue/tag";
 import { createStore } from "vuex";
 import State from "@/store/State";
 import SocketService from "@/services/SocketService";
@@ -88,7 +88,6 @@ createApp(App)
   .use(router)
   .use(PrimeVue)
   .use(store)
-  .component("Menubar", Menubar)
   .component("Card", Card)
   .component("Image", Image)
   .component("Badge", Badge)
@@ -101,4 +100,5 @@ createApp(App)
   .component("Button", Button)
   .component("InputNumber", InputNumber)
   .component("Dropdown", Dropdown)
+  .component("Tag", Tag)
   .mount("#app");

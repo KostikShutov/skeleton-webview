@@ -1,17 +1,11 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import Home from "../views/Home.vue";
-import Generator from "../views/Generator.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
-    name: "Главная",
+    name: "Управление беспилотным наземным аппаратом",
     component: Home,
-  },
-  {
-    path: "/generator",
-    name: "Генератор",
-    component: Generator,
   },
 ];
 

@@ -1,85 +1,102 @@
 <template>
   <div id="app">
-    <div class="button-container">
-      <span class="p-float-label">
-        <Textarea v-model="coordinatesAsJson" autoResize rows="5" cols="30" />
-        <label>Координаты [json]</label>
-      </span>
+    <div class="flex flex-row">
+      <div class="ml-5">
+        <div class="button-container">
+          <span class="p-float-label">
+            <Textarea
+              v-model="coordinatesAsJson"
+              autoResize
+              rows="5"
+              cols="30"
+            />
+            <label>Координаты [json]</label>
+          </span>
+        </div>
+        <div class="button-container">
+          <Button
+            label="Отправить команды"
+            icon="pi pi-check"
+            @click.prevent="sendCommands()"
+          />
+        </div>
+      </div>
+      <div class="ml-6">
+        <div class="button-container">
+          <span class="p-float-label">
+            <Dropdown
+              v-model="selectedModel"
+              :options="models"
+              optionLabel="name"
+              optionValue="value"
+              class="w-full md:w-14rem"
+            />
+            <label>Модель</label>
+          </span>
+        </div>
+        <div class="button-container">
+          <span class="p-float-label">
+            <InputNumber
+              v-model="startYaw"
+              inputId="startYaw"
+              :min="0"
+              :max="360"
+            />
+            <label for="startYaw">Начальный угол [град]</label>
+          </span>
+        </div>
+        <div class="button-container">
+          <span class="p-float-label">
+            <InputNumber
+              v-model="duration"
+              inputId="duration"
+              :min="0"
+              :max="10"
+              :minFractionDigits="1"
+              :maxFractionDigits="2"
+            />
+            <label for="duration">Время команды [с]</label>
+          </span>
+        </div>
+        <div class="button-container">
+          <span class="p-float-label">
+            <InputNumber
+              v-model="errorRate"
+              inputId="errorRate"
+              :min="0"
+              :max="10"
+              :minFractionDigits="1"
+              :maxFractionDigits="2"
+            />
+            <label for="errorRate">Приближение [м]</label>
+          </span>
+        </div>
+        <div class="button-container">
+          <span class="p-float-label">
+            <InputNumber
+              v-model="maxIterations"
+              inputId="maxIterations"
+              :min="1"
+              :max="99999"
+            />
+            <label for="maxIterations">Максимум итераций</label>
+          </span>
+        </div>
+      </div>
     </div>
-    <div class="button-container">
-      <span class="p-float-label">
-        <Dropdown
-          v-model="selectedModel"
-          :options="models"
-          optionLabel="name"
-          optionValue="value"
-          class="w-full md:w-14rem"
-        />
-        <label>Модель</label>
-      </span>
-    </div>
-    <div class="button-container">
-      <span class="p-float-label">
-        <InputNumber
-          v-model="startYaw"
-          inputId="startYaw"
-          :min="0"
-          :max="360"
-        />
-        <label for="startYaw">Начальный угол [град]</label>
-      </span>
-    </div>
-    <div class="button-container">
-      <span class="p-float-label">
-        <InputNumber
-          v-model="duration"
-          inputId="duration"
-          :min="0"
-          :max="10"
-          :minFractionDigits="1"
-          :maxFractionDigits="2"
-        />
-        <label for="duration">Время команды [с]</label>
-      </span>
-    </div>
-    <div class="button-container">
-      <span class="p-float-label">
-        <InputNumber
-          v-model="errorRate"
-          inputId="errorRate"
-          :min="0"
-          :max="10"
-          :minFractionDigits="1"
-          :maxFractionDigits="2"
-        />
-        <label for="errorRate">Приближение [м]</label>
-      </span>
-    </div>
-    <div class="button-container">
-      <span class="p-float-label">
-        <InputNumber
-          v-model="maxIterations"
-          inputId="maxIterations"
-          :min="1"
-          :max="99999"
-        />
-        <label for="maxIterations">Максимум итераций</label>
-      </span>
-    </div>
-    <div class="button-container">
-      <Button
-        label="Отправить команды"
-        icon="pi pi-check"
-        @click.prevent="sendCommands()"
-      />
-    </div>
-    <h3>Результат генерации</h3>
-    <DataTable :value="commands" tableStyle="min-width: 50rem">
-      <Column
-        field="steering"
-        header="Угол поворота рулевого колеса [град]"
-      ></Column>
-      <Column field="speed" header="Скорость движения [м/с]"></Column>
+    <h3 class="text-center">Отправленные команды</h3>
+    <DataTable :value="commands" tableStyle="min-width: 50rem" showGridlines>
+      <Column field="id" header="Идентификатор"></Column>
+      <Column field="steering" header="Угол поворота [град]"></Column>
+      <Column field="speed" header="Скорость [м/с]"></Column>
+      <Column field="status" header="Статус" style="min-width: 200px">
+        <template #body="body">
+          <Tag
+            :value="getStatusText(body.data.status)"
+            :severity="getStatusSeverity(body.data.status)"
+          />
+        </template>
+      </Column>
     </DataTable>
   </div>
 </template>
@@ -114,8 +131,10 @@ interface Coordinate {
 }
 
 interface Command {
+  id?: string;
   steering: number;
   speed: number;
+  status?: string;
 }
 
 export default defineComponent({
@@ -149,6 +168,14 @@ export default defineComponent({
       commands.value.push(newCommand);
     };
 
+    const modifyCommand = (id: string, status: string) => {
+      const index = commands.value.findIndex((row) => row.id === id);
+
+      if (index !== -1) {
+        commands.value[index].status = status;
+      }
+    };
+
     const clearCommands = () => {
       commands.value = [];
     };
@@ -156,8 +183,19 @@ export default defineComponent({
     return {
       commands,
       addCommand,
+      modifyCommand,
       clearCommands,
     };
+  },
+  mounted() {
+    SocketService.socket.on("getCommand", (data) => {
+      try {
+        const parsedData: { id: string; status: string } = JSON.parse(data);
+        this.modifyCommand(parsedData.id, parsedData.status);
+      } catch (error) {
+        console.error("Invalid json from get command event:", data);
+      }
+    });
   },
   methods: {
     sendCommands(): void {
@@ -255,19 +293,7 @@ export default defineComponent({
               yaw = this.normalizeAngle(yaw);
             }
 
-            SocketService.socket.emit("pushCommands", [
-              {
-                name: "MOVE",
-                steering: -command.steering,
-                speed: 60,
-                duration: this.duration,
-              },
-            ]);
-
-            this.addCommand({
-              steering: command.steering,
-              speed: command.speed,
-            });
+            this.pushCommands(command);
 
             predictedCoordinates.push({
               x: fromCoordinate.x,
@@ -313,6 +339,29 @@ export default defineComponent({
       };
 
       doInitAndGenerate();
+    },
+    pushCommands(command: Command) {
+      SocketService.socket.timeout(1000).emit(
+        "pushCommand",
+        {
+          name: "MOVE",
+          steering: -command.steering,
+          speed: 60,
+          duration: this.duration,
+        },
+        (err: unknown, id: string) => {
+          if (err) {
+            console.error(err);
+          }
+
+          this.addCommand({
+            id: id,
+            steering: command.steering,
+            speed: command.speed,
+            status: err ? "error" : "sent",
+          });
+        },
+      );
     },
     needCloserToNextCoordinate(
       fromCoordinate: Coordinate,
@@ -365,6 +414,34 @@ export default defineComponent({
       }
 
       return angle;
+    },
+    getStatusText(status: string): string | undefined {
+      switch (status) {
+        case "sent":
+          return "Отправлено";
+        case "success":
+          return "Успешно";
+        case "cancelled":
+          return "Отменено";
+        case "error":
+          return "Ошибка";
+        default:
+          return undefined;
+      }
+    },
+    getStatusSeverity(status: string): string | undefined {
+      switch (status) {
+        case "sent":
+          return "info";
+        case "success":
+          return "success";
+        case "cancelled":
+          return "warning";
+        case "error":
+          return "danger";
+        default:
+          return undefined;
+      }
     },
   },
 });
