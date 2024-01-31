@@ -8,7 +8,7 @@
               v-model="coordinatesAsJson"
               autoResize
               rows="5"
-              cols="30"
+              cols="40"
             />
             <label>Координаты [json]</label>
           </span>
