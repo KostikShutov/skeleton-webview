@@ -57,4 +57,12 @@ export default class CameraControlService implements ControlServiceInterface {
   public forceStop(): void {
     throw new Error("Stop is not available for camera");
   }
+
+  public speedUp(): void {
+    throw new Error("Speed is not available for camera");
+  }
+
+  public speedDown(): void {
+    throw new Error("Speed is not available for camera");
+  }
 }

@@ -116,6 +116,7 @@ body {
 <script lang="ts">
 import { defineComponent, ref, Ref } from "vue";
 import SocketService from "@/services/SocketService";
+import State from "@/store/State";
 
 interface Init {
   config: {
@@ -190,8 +191,13 @@ export default defineComponent({
   mounted() {
     SocketService.socket.on("getCommand", (data) => {
       try {
-        const parsedData: { id: string; status: string } = JSON.parse(data);
+        const parsedData: { id: string; status: string; state: State } =
+          JSON.parse(data);
+
+        this.$store.commit("setCurrentAngle", parsedData.state.currentAngle);
+        this.$store.commit("setCurrentSpeed", parsedData.state.currentSpeed);
         this.modifyCommand(parsedData.id, parsedData.status);
+        console.log(parsedData);
       } catch (error) {
         console.error("Invalid json from get command event:", data);
       }
@@ -293,7 +299,7 @@ export default defineComponent({
               yaw = this.normalizeAngle(yaw);
             }
 
-            this.pushCommands(command);
+            this.pushCommand(command);
 
             predictedCoordinates.push({
               x: fromCoordinate.x,
@@ -340,7 +346,7 @@ export default defineComponent({
 
       doInitAndGenerate();
     },
-    pushCommands(command: Command) {
+    pushCommand(command: Command) {
       SocketService.socket.timeout(1000).emit(
         "pushCommand",
         {
@@ -352,14 +358,14 @@ export default defineComponent({
         (err: unknown, id: string) => {
           if (err) {
             console.error(err);
+          } else {
+            this.addCommand({
+              id: id,
+              steering: command.steering,
+              speed: command.speed,
+              status: err ? "error" : "sent",
+            });
           }
-
-          this.addCommand({
-            id: id,
-            steering: command.steering,
-            speed: command.speed,
-            status: err ? "error" : "sent",
-          });
         },
       );
     },

@@ -5,7 +5,6 @@ import PrimeVue from "primevue/config";
 import Card from "primevue/card";
 import Image from "primevue/image";
 import Badge from "primevue/badge";
-import Slider from "primevue/slider";
 import InlineMessage from "primevue/inlinemessage";
 import Knob from "primevue/knob";
 import DataTable from "primevue/datatable";
@@ -18,6 +17,7 @@ import Tag from "primevue/tag";
 import { createStore } from "vuex";
 import State from "@/store/State";
 import SocketService from "@/services/SocketService";
+import { createYmaps } from "vue-yandex-maps";
 
 import "primeflex/primeflex.css";
 import "primevue/resources/themes/lara-light-blue/theme.css";
@@ -27,15 +27,22 @@ import "primeicons/primeicons.css";
 const store = createStore({
   state(): State {
     return {
+      ok: false,
       minAngle: 0,
       maxAngle: 0,
       currentAngle: 0,
       minSpeed: 0,
       maxSpeed: 0,
       currentSpeed: 0,
+      latitude: 55.755819,
+      longitude: 37.617644,
     };
   },
   mutations: {
+    setOk(state: State, ok: boolean): void {
+      state.ok = ok;
+    },
+
     setMinAngle(state: State, minAngle: number): void {
       state.minAngle = minAngle;
     },
@@ -59,39 +66,56 @@ const store = createStore({
     setCurrentSpeed(state: State, currentSpeed: number): void {
       state.currentSpeed = currentSpeed;
     },
+
+    setLatitude(state: State, latitude: number): void {
+      state.latitude = latitude;
+    },
+
+    setLongitude(state: State, longitude: number): void {
+      state.longitude = longitude;
+    },
   },
 });
 
-SocketService.socket
-  .timeout(1000)
-  .emit("state", (err: unknown, json: string) => {
-    if (err) {
-      console.log("No socket connection");
-      console.error(err);
+setInterval(() => {
+  SocketService.socket
+    .timeout(1000)
+    .emit("state", (err: unknown, json: string) => {
+      if (err) {
+        console.log("No socket connection");
+        console.error(err);
 
-      return;
-    }
+        return;
+      }
 
-    const state: State = JSON.parse(json);
+      const state: State = JSON.parse(json);
 
-    store.state.minAngle = state.minAngle;
-    store.state.maxAngle = state.maxAngle;
-    store.state.currentAngle = state.currentAngle;
-    store.state.minSpeed = state.minSpeed;
-    store.state.maxSpeed = state.maxSpeed;
-    store.state.currentSpeed = state.currentSpeed;
+      store.state.ok = state.ok;
+      store.state.minAngle = state.minAngle;
+      store.state.maxAngle = state.maxAngle;
+      store.state.currentAngle = state.currentAngle;
+      store.state.minSpeed = state.minSpeed;
+      store.state.maxSpeed = state.maxSpeed;
+      store.state.currentSpeed = state.currentSpeed;
+      store.state.latitude = state.latitude;
+      store.state.longitude = state.longitude;
 
-    console.log(state);
-  });
+      console.log(state);
+    });
+}, 2000);
 
 createApp(App)
   .use(router)
   .use(PrimeVue)
   .use(store)
+  .use(
+    createYmaps({
+      apikey: process.env.VUE_APP_YANDEX_MAP_KEY,
+    }),
+  )
   .component("Card", Card)
   .component("Image", Image)
   .component("Badge", Badge)
-  .component("Slider", Slider)
   .component("InlineMessage", InlineMessage)
   .component("Knob", Knob)
   .component("DataTable", DataTable)

@@ -19,6 +19,7 @@
     "socket.io-client": "^4.7.3",
     "vue": "^3.4.7",
     "vue-router": "^4.2.5",
+    "vue-yandex-maps": "^2.0.0-rc.12",
     "vuex": "^4.1.0"
   },
   "devDependencies": {

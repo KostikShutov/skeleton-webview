@@ -18,4 +18,8 @@ export default interface ControlServiceInterface {
   stop(): void;
 
   forceStop(): void;
+
+  speedUp(): void;
+
+  speedDown(): void;
 }

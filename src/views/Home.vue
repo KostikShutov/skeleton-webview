@@ -31,7 +31,7 @@
             <InlineMessage severity="info">Камера</InlineMessage>
           </div>
           <div class="flex justify-content-center w-full">
-            <ControlPanel :service="camera" :withStop="false" />
+            <ControlPanel :service="camera" :isWheels="false" />
           </div>
         </div>
       </div>

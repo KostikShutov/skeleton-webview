@@ -1,9 +1,18 @@
 <template>
   <div style="width: 210px">
     <div class="grid grid-nogutter">
-      <div class="col-4 col-offset-4">
+      <div class="col-4" style="transform: rotate(-90deg)">
+        <DirectionArrow
+          v-if="isWheels"
+          v-on:click="speedUp()"
+          class="pi pi-forward"
+        />
+        <DirectionArrow v-else class="pi" />
+      </div>
+      <div class="col-4">
         <DirectionArrow v-on:click="forward()" class="pi pi-arrow-up" />
       </div>
+      <DirectionArrow class="pi" />
     </div>
 
     <div class="grid grid-nogutter">
@@ -12,7 +21,7 @@
       </div>
       <div class="col-4">
         <DirectionArrow
-          v-if="withStop"
+          v-if="isWheels"
           v-on:click="stop()"
           class="pi pi-stop-circle"
         />
@@ -24,12 +33,20 @@
     </div>
 
     <div class="grid grid-nogutter">
-      <div class="col-4 col-offset-4">
+      <div class="col-4" style="transform: rotate(-90deg)">
+        <DirectionArrow
+          v-if="isWheels"
+          v-on:click="speedDown()"
+          class="pi pi-backward"
+        />
+        <DirectionArrow v-else class="pi" />
+      </div>
+      <div class="col-4">
         <DirectionArrow v-on:click="backward()" class="pi pi-arrow-down" />
       </div>
       <div class="col-4">
         <DirectionArrow
-          v-if="withStop"
+          v-if="isWheels"
           v-on:click="forceStop()"
           class="pi pi-power-off"
         />
@@ -54,7 +71,7 @@ export default defineComponent({
       type: Object as () => ControlServiceInterface,
       required: true,
     },
-    withStop: {
+    isWheels: {
       type: Boolean,
       default: true,
     },
@@ -84,32 +101,14 @@ export default defineComponent({
     forceStop(): void {
       this.service.forceStop();
     },
-  },
 
-  created(): void {
-    window.addEventListener("keypress", (event: KeyboardEvent) => {
-      const keys = this.service.getKeys();
+    speedUp(): void {
+      this.service.speedUp();
+    },
 
-      switch (event.key) {
-        case keys.forward:
-          this.forward();
-          break;
-        case keys.backward:
-          this.backward();
-          break;
-        case keys.left:
-          this.left();
-          break;
-        case keys.right:
-          this.right();
-          break;
-        case keys.stop:
-          if (this.withStop) {
-            this.stop();
-          }
-          break;
-      }
-    });
+    speedDown(): void {
+      this.service.speedDown();
+    },
   },
 });
 </script>

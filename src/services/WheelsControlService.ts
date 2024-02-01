@@ -45,49 +45,31 @@ export default class WheelsControlService implements ControlServiceInterface {
   }
 
   public left(): void {
-    SocketService.socket
-      .timeout(1000)
-      .emit("state", (err: unknown, json: string) => {
-        if (err) {
-          console.error("[Wheels] left", err);
-        } else {
-          const state: State = JSON.parse(json);
-          const currentAngle = state.currentAngle;
-          const minAngle = this.store.state.minAngle;
-          let newAngle: number = currentAngle - 15;
+    const currentAngle = this.store.state.currentAngle;
+    const minAngle = this.store.state.minAngle;
+    let newAngle: number = currentAngle - 15;
 
-          newAngle = newAngle < minAngle ? minAngle : newAngle;
+    newAngle = newAngle < minAngle ? minAngle : newAngle;
 
-          this.doTurn(newAngle);
+    this.doTurn(newAngle);
 
-          console.log(
-            `[Wheels] left (oldAngle: ${currentAngle}, newAngle: ${newAngle})`,
-          );
-        }
-      });
+    console.log(
+      `[Wheels] left (oldAngle: ${currentAngle}, newAngle: ${newAngle})`,
+    );
   }
 
   public right(): void {
-    SocketService.socket
-      .timeout(1000)
-      .emit("state", (err: unknown, json: string) => {
-        if (err) {
-          console.error("[Wheels] right", err);
-        } else {
-          const state: State = JSON.parse(json);
-          const currentAngle = state.currentAngle;
-          const maxAngle = this.store.state.maxAngle;
-          let newAngle: number = currentAngle + 15;
+    const currentAngle = this.store.state.currentAngle;
+    const maxAngle = this.store.state.maxAngle;
+    let newAngle: number = currentAngle + 15;
 
-          newAngle = newAngle > maxAngle ? maxAngle : newAngle;
+    newAngle = newAngle > maxAngle ? maxAngle : newAngle;
 
-          this.doTurn(newAngle);
+    this.doTurn(newAngle);
 
-          console.log(
-            `[Wheels] right (oldAngle: ${currentAngle}, newAngle: ${newAngle})`,
-          );
-        }
-      });
+    console.log(
+      `[Wheels] right (oldAngle: ${currentAngle}, newAngle: ${newAngle})`,
+    );
   }
 
   public stop(): void {
@@ -112,12 +94,28 @@ export default class WheelsControlService implements ControlServiceInterface {
     });
   }
 
+  public speedUp(): void {
+    SocketService.socket.emit("pushCommand", {
+      name: "SPEED",
+      speed: this.store.state.currentSpeed + 20,
+    });
+
+    console.log("[Wheels] speed up");
+  }
+
+  public speedDown(): void {
+    SocketService.socket.emit("pushCommand", {
+      name: "SPEED",
+      speed: this.store.state.currentSpeed - 20,
+    });
+
+    console.log("[Wheels] speed down");
+  }
+
   private doTurn(newAngle: number): void {
     SocketService.socket.emit("pushCommand", {
       name: "TURN",
       steering: newAngle,
     });
-
-    this.store.state.currentAngle = newAngle;
   }
 }
