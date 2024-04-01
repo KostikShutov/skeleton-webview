@@ -154,7 +154,7 @@ export default defineComponent({
       models: [
         { name: "Нормальная", value: "normal" },
         { name: "Агрессивная", value: "aggressive" },
-        { name: "Практика", value: "practice" },
+        { name: "Динамичная", value: "dynamic" },
       ],
       startYaw: undefined,
       duration: 0.01,
