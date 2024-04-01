@@ -287,10 +287,7 @@ export default defineComponent({
             fromCoordinate.x += command.speed * Math.cos(yaw) * this.duration;
             fromCoordinate.y += command.speed * Math.sin(yaw) * this.duration;
 
-            if (
-              this.selectedModel === "normal" ||
-              !this.needMoveStraight(yaw, fromCoordinate, toCoordinate)
-            ) {
+            if (!this.needMoveStraight(yaw, fromCoordinate, toCoordinate)) {
               yaw +=
                 Math.tan(this.toRadians(command.steering)) *
                 (command.speed / length) *
