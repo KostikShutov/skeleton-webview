@@ -129,6 +129,7 @@ interface Init {
 interface Coordinate {
   x: number;
   y: number;
+  speed?: number;
 }
 
 interface Command {
@@ -280,6 +281,7 @@ export default defineComponent({
             predictedCoordinates.push({
               x: fromCoordinate.x,
               y: fromCoordinate.y,
+              speed: command.speed,
             });
           }
 
@@ -301,6 +303,7 @@ export default defineComponent({
             predictedCoordinates.push({
               x: fromCoordinate.x,
               y: fromCoordinate.y,
+              speed: command.speed,
             });
 
             const distance = this.calculateDistance(
