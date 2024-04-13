@@ -151,11 +151,13 @@ export default defineComponent({
   } {
     return {
       coordinatesAsJson: "",
-      selectedModel: "normal",
+      selectedModel: "static_smoothly",
       models: [
-        { name: "Нормальная", value: "normal" },
-        { name: "Агрессивная", value: "aggressive" },
-        { name: "Динамичная", value: "dynamic" },
+        { name: "Static smoothly", value: "static_smoothly" },
+        { name: "Static aggressive", value: "static_aggressive" },
+        { name: "Speed dynamic", value: "speed_dynamic" },
+        { name: "Speed slow", value: "speed_slow" },
+        { name: "Speed weekly", value: "speed_weekly" },
       ],
       startYaw: undefined,
       duration: 0.01,
