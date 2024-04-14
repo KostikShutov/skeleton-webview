@@ -97,8 +97,11 @@ setInterval(() => {
       store.state.minSpeed = state.minSpeed;
       store.state.maxSpeed = state.maxSpeed;
       store.state.currentSpeed = state.currentSpeed;
-      store.state.latitude = state.latitude;
-      store.state.longitude = state.longitude;
+
+      if (state.latitude > 0 && state.longitude > 0) {
+        store.state.latitude = state.latitude;
+        store.state.longitude = state.longitude;
+      }
 
       console.log(state);
     });
