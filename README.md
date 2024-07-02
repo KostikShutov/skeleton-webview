@@ -2,9 +2,9 @@
 
 ## Другие компоненты общей системы
 
-[Raspberry server](https://github.com/KostikShutov/skeleton-server)
+[Car control](https://github.com/KostikShutov/skeleton-car)
 
-[Command generator](https://github.com/KostikShutov/skeleton-generator)
+[Autonomous command generator](https://github.com/KostikShutov/skeleton-autonomous)
 
 ## Docker
 
