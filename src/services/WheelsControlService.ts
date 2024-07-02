@@ -54,7 +54,7 @@ export default class WheelsControlService implements ControlServiceInterface {
     this.doTurn(newAngle);
 
     console.log(
-      `[Wheels] left (oldAngle: ${currentAngle}, newAngle: ${newAngle})`,
+      `[Wheels] left (oldAngle: ${currentAngle}, newAngle: ${newAngle})`
     );
   }
 
@@ -68,13 +68,14 @@ export default class WheelsControlService implements ControlServiceInterface {
     this.doTurn(newAngle);
 
     console.log(
-      `[Wheels] right (oldAngle: ${currentAngle}, newAngle: ${newAngle})`,
+      `[Wheels] right (oldAngle: ${currentAngle}, newAngle: ${newAngle})`
     );
   }
 
   public stop(): void {
     SocketService.socket.emit("pushCommand", {
       name: "STOP",
+      duration: 0,
     });
 
     console.log("[Wheels] stop");
@@ -87,6 +88,7 @@ export default class WheelsControlService implements ControlServiceInterface {
       } else {
         SocketService.socket.emit("pushCommand", {
           name: "STOP",
+          duration: 0,
         });
 
         console.log("[Wheels] force stop");
