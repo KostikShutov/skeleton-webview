@@ -352,7 +352,8 @@ export default defineComponent({
       SocketService.socket.timeout(1000).emit(
         "pushCommand",
         {
-          name: "MOVE",
+          algorithmName: "AUTO",
+          commandName: "MOVE",
           steering: -command.steering,
           speed: 60,
           duration: this.duration,

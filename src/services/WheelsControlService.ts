@@ -28,7 +28,8 @@ export default class WheelsControlService implements ControlServiceInterface {
 
   public forward(): void {
     SocketService.socket.emit("pushCommand", {
-      name: "FORWARD",
+      algorithmName: "MANUAL",
+      commandName: "FORWARD",
       speed: this.store.state.currentSpeed,
     });
 
@@ -37,7 +38,8 @@ export default class WheelsControlService implements ControlServiceInterface {
 
   public backward(): void {
     SocketService.socket.emit("pushCommand", {
-      name: "BACKWARD",
+      algorithmName: "MANUAL",
+      commandName: "BACKWARD",
       speed: this.store.state.currentSpeed,
     });
 
@@ -74,7 +76,8 @@ export default class WheelsControlService implements ControlServiceInterface {
 
   public stop(): void {
     SocketService.socket.emit("pushCommand", {
-      name: "STOP",
+      algorithmName: "MANUAL",
+      commandName: "STOP",
       duration: 0,
     });
 
@@ -87,7 +90,8 @@ export default class WheelsControlService implements ControlServiceInterface {
         console.error("[Wheels] force stop", err);
       } else {
         SocketService.socket.emit("pushCommand", {
-          name: "STOP",
+          algorithmName: "MANUAL",
+          commandName: "STOP",
           duration: 0,
         });
 
@@ -98,7 +102,8 @@ export default class WheelsControlService implements ControlServiceInterface {
 
   public speedUp(): void {
     SocketService.socket.emit("pushCommand", {
-      name: "SPEED",
+      algorithmName: "MANUAL",
+      commandName: "SPEED",
       speed: this.store.state.currentSpeed + 20,
     });
 
@@ -107,7 +112,8 @@ export default class WheelsControlService implements ControlServiceInterface {
 
   public speedDown(): void {
     SocketService.socket.emit("pushCommand", {
-      name: "SPEED",
+      algorithmName: "MANUAL",
+      commandName: "SPEED",
       speed: this.store.state.currentSpeed - 20,
     });
 
@@ -116,7 +122,8 @@ export default class WheelsControlService implements ControlServiceInterface {
 
   private doTurn(newAngle: number): void {
     SocketService.socket.emit("pushCommand", {
-      name: "TURN",
+      algorithmName: "MANUAL",
+      commandName: "TURN",
       steering: newAngle,
     });
   }
