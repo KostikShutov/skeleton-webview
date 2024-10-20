@@ -1,115 +1,103 @@
 <template>
-  <div id="app">
-    <div class="flex flex-row">
-      <div class="ml-5">
-        <div class="button-container">
-          <span class="p-float-label">
-            <Textarea
-              v-model="coordinatesAsJson"
-              autoResize
-              rows="5"
-              cols="40"
-            />
-            <label>Координаты [json]</label>
-          </span>
-        </div>
-        <div class="button-container">
-          <Button
-            label="Отправить команды"
-            icon="pi pi-check"
-            @click.prevent="sendCommands()"
-          />
-        </div>
+  <div class="flex flex-row">
+    <div>
+      <div class="button-container">
+        <span class="p-float-label">
+          <Textarea v-model="coordinatesAsJson" autoResize rows="5" cols="40" />
+          <label>Координаты [json]</label>
+        </span>
       </div>
-      <div class="ml-6">
-        <div class="button-container">
-          <span class="p-float-label">
-            <Dropdown
-              v-model="selectedModel"
-              :options="models"
-              optionLabel="name"
-              optionValue="value"
-              class="w-full md:w-14rem"
-            />
-            <label>Модель</label>
-          </span>
-        </div>
-        <div class="button-container">
-          <span class="p-float-label">
-            <InputNumber
-              v-model="startYaw"
-              inputId="startYaw"
-              :min="0"
-              :max="360"
-            />
-            <label for="startYaw">Начальный угол [град]</label>
-          </span>
-        </div>
-        <div class="button-container">
-          <span class="p-float-label">
-            <InputNumber
-              v-model="duration"
-              inputId="duration"
-              :min="0"
-              :max="10"
-              :minFractionDigits="1"
-              :maxFractionDigits="2"
-            />
-            <label for="duration">Время команды [с]</label>
-          </span>
-        </div>
-        <div class="button-container">
-          <span class="p-float-label">
-            <InputNumber
-              v-model="errorRate"
-              inputId="errorRate"
-              :min="0"
-              :max="10"
-              :minFractionDigits="1"
-              :maxFractionDigits="2"
-            />
-            <label for="errorRate">Приближение [м]</label>
-          </span>
-        </div>
-        <div class="button-container">
-          <span class="p-float-label">
-            <InputNumber
-              v-model="maxIterations"
-              inputId="maxIterations"
-              :min="1"
-              :max="99999"
-            />
-            <label for="maxIterations">Максимум итераций</label>
-          </span>
-        </div>
+      <div class="button-container mt-3">
+        <Button
+          label="Отправить команды"
+          icon="pi pi-check"
+          @click.prevent="sendCommands()"
+        />
       </div>
     </div>
-    <h3 class="text-center">Отправленные команды</h3>
-    <DataTable :value="commands" tableStyle="min-width: 50rem" showGridlines>
-      <Column field="id" header="Идентификатор"></Column>
-      <Column field="steering" header="Угол поворота [град]"></Column>
-      <Column field="speed" header="Скорость [м/с]"></Column>
-      <Column field="status" header="Статус" style="min-width: 200px">
-        <template #body="body">
-          <Tag
-            :value="getStatusText(body.data.status)"
-            :severity="getStatusSeverity(body.data.status)"
+    <div class="ml-3">
+      <div class="button-container">
+        <span class="p-float-label">
+          <Dropdown
+            v-model="selectedModel"
+            :options="models"
+            optionLabel="name"
+            optionValue="value"
+            class="w-full md:w-14rem"
           />
-        </template>
-      </Column>
-    </DataTable>
+          <label>Модель</label>
+        </span>
+      </div>
+      <div class="button-container" style="margin-top: 25px">
+        <span class="p-float-label">
+          <InputNumber
+            v-model="startYaw"
+            inputId="startYaw"
+            :min="0"
+            :max="360"
+          />
+          <label for="startYaw">Начальный угол [град]</label>
+        </span>
+      </div>
+      <div class="button-container" style="margin-top: 25px">
+        <span class="p-float-label">
+          <InputNumber
+            v-model="duration"
+            inputId="duration"
+            :min="0"
+            :max="10"
+            :minFractionDigits="1"
+            :maxFractionDigits="2"
+          />
+          <label for="duration">Время команды [с]</label>
+        </span>
+      </div>
+      <div class="button-container" style="margin-top: 25px">
+        <span class="p-float-label">
+          <InputNumber
+            v-model="errorRate"
+            inputId="errorRate"
+            :min="0"
+            :max="10"
+            :minFractionDigits="1"
+            :maxFractionDigits="2"
+          />
+          <label for="errorRate">Приближение [м]</label>
+        </span>
+      </div>
+      <div class="button-container" style="margin-top: 25px">
+        <span class="p-float-label">
+          <InputNumber
+            v-model="maxIterations"
+            inputId="maxIterations"
+            :min="1"
+            :max="99999"
+          />
+          <label for="maxIterations">Максимум итераций</label>
+        </span>
+      </div>
+    </div>
   </div>
+  <h3 class="text-center">Отправленные команды</h3>
+  <DataTable :value="commands" tableStyle="min-width: 50rem" showGridlines>
+    <Column field="id" header="Идентификатор"></Column>
+    <Column field="steering" header="Угол поворота [град]"></Column>
+    <Column field="speed" header="Скорость [м/с]"></Column>
+    <Column field="status" header="Статус" style="min-width: 200px">
+      <template #body="body">
+        <Tag
+          :value="getStatusText(body.data.status)"
+          :severity="getStatusSeverity(body.data.status)"
+        />
+      </template>
+    </Column>
+  </DataTable>
 </template>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,700&display=swap");
-body {
-  font-family: "Roboto", sans-serif;
-}
 .button-container {
   display: flex;
   flex-direction: row;
-  margin-top: 25px;
 }
 </style>
 
@@ -197,8 +185,6 @@ export default defineComponent({
         const parsedData: { id: string; status: string; state: State } =
           JSON.parse(data);
 
-        this.$store.commit("setCurrentAngle", parsedData.state.currentAngle);
-        this.$store.commit("setCurrentSpeed", parsedData.state.currentSpeed);
         this.modifyCommand(parsedData.id, parsedData.status);
         console.log(parsedData);
       } catch (error) {

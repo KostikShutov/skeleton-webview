@@ -14,6 +14,7 @@ import Button from "primevue/button";
 import InputNumber from "primevue/inputnumber";
 import Dropdown from "primevue/dropdown";
 import Tag from "primevue/tag";
+import Menubar from "primevue/menubar";
 import { createStore } from "vuex";
 import State from "@/store/State";
 import SocketService from "@/services/SocketService";
@@ -128,4 +129,5 @@ createApp(App)
   .component("InputNumber", InputNumber)
   .component("Dropdown", Dropdown)
   .component("Tag", Tag)
+  .component("Menubar", Menubar)
   .mount("#app");

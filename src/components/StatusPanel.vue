@@ -1,6 +1,6 @@
 <template>
   <div class="flex-column">
-    <div class="mb-2">
+    <div class="flex justify-content-center align-items-center mb-2">
       <Badge
         :severity="$store.state.ok ? 'success' : 'danger'"
         class="mr-2"
@@ -10,20 +10,22 @@
       }}</span>
     </div>
     <div>
-      <div class="mb-2">
+      <div class="flex justify-content-center align-items-center mb-2">
         <span>Скорость:</span>
       </div>
       <Knob
+        class="flex justify-content-center align-items-center"
         v-model="$store.state.currentSpeed"
         :min="$store.state.minSpeed"
         :max="$store.state.maxSpeed"
       />
     </div>
     <div>
-      <div clss="mb-2">
+      <div class="flex justify-content-center align-items-center mb-2">
         <span>Угол колес:</span>
       </div>
       <Knob
+        class="flex justify-content-center align-items-center"
         v-model="$store.state.currentAngle"
         :min="$store.state.minAngle"
         :max="$store.state.maxAngle"

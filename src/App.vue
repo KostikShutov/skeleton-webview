@@ -1,21 +1,28 @@
 <template>
+  <Menubar :model="items">
+    <template #start>
+      <img
+        alt="logo"
+        :src="require('@/assets/water.jpg')"
+        height="40"
+        class="mr-2"
+      />
+    </template>
+  </Menubar>
   <Card class="mt-2">
-    <template #title>
-      <div class="flex align-items-center">
-        <img
-          alt="logo"
-          :src="require('@/assets/water.jpg')"
-          height="40"
-          class="mr-2"
-        />
-        <span>{{ $route.name }}</span>
-      </div></template
-    >
+    <template #title>{{ $route.name }}</template>
     <template #content>
       <router-view />
     </template>
   </Card>
 </template>
+
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,700&display=swap");
+body {
+  font-family: "Roboto", sans-serif;
+}
+</style>
 
 <style lang="stylus">
 #app
@@ -26,5 +33,27 @@
 </style>
 
 <script lang="ts">
-export default {};
+export default {
+  data(): { items: Array<{ label: string; icon: string; url: string }> } {
+    return {
+      items: [
+        {
+          label: "Главная",
+          icon: "pi pi-fw pi-car",
+          url: "/",
+        },
+        {
+          label: "Автономное управление",
+          icon: "pi pi-fw pi-compass",
+          url: "/generator",
+        },
+        {
+          label: "Конфигурация",
+          icon: "pi pi-fw pi-book",
+          url: "/config",
+        },
+      ],
+    };
+  },
+};
 </script>
