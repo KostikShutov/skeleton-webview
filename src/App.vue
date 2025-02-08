@@ -52,6 +52,11 @@ export default {
           icon: "pi pi-fw pi-book",
           url: "/config",
         },
+        {
+          label: "Загрузка файлов",
+          icon: "pi pi-fw pi-upload",
+          url: "/upload",
+        },
       ],
     };
   },
