@@ -38,12 +38,12 @@ export default {
     return {
       items: [
         {
-          label: "Главная",
+          label: "Ручное управление",
           icon: "pi pi-fw pi-car",
           url: "/",
         },
         {
-          label: "Автономное управление",
+          label: "Управление по траектории",
           icon: "pi pi-fw pi-compass",
           url: "/generator",
         },

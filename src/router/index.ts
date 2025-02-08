@@ -6,12 +6,12 @@ import Config from "../views/Config.vue";
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
-    name: "Управление беспилотным наземным аппаратом",
+    name: "Ручное управление",
     component: Home,
   },
   {
     path: "/generator",
-    name: "Автономное управление",
+    name: "Управление по траектории",
     component: Generator,
   },
   {
