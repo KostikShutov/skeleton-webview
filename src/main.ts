@@ -83,6 +83,8 @@ setInterval(() => {
     .timeout(1000)
     .emit("state", (err: unknown, json: string) => {
       if (err) {
+        store.state.ok = false;
+
         console.log("No socket connection");
         console.error(err);
 
