@@ -20,7 +20,6 @@ export default class CameraControlService implements ControlServiceInterface {
 
   public forward(): void {
     SocketService.socket.emit("pushCommand", {
-      algorithmName: "MANUAL",
       commandName: "CAMERA_UP",
     });
 
@@ -29,7 +28,6 @@ export default class CameraControlService implements ControlServiceInterface {
 
   public backward(): void {
     SocketService.socket.emit("pushCommand", {
-      algorithmName: "MANUAL",
       commandName: "CAMERA_DOWN",
     });
 
@@ -38,7 +36,6 @@ export default class CameraControlService implements ControlServiceInterface {
 
   public left(): void {
     SocketService.socket.emit("pushCommand", {
-      algorithmName: "MANUAL",
       commandName: "CAMERA_LEFT",
     });
 
@@ -47,7 +44,6 @@ export default class CameraControlService implements ControlServiceInterface {
 
   public right(): void {
     SocketService.socket.emit("pushCommand", {
-      algorithmName: "MANUAL",
       commandName: "CAMERA_RIGHT",
     });
 
