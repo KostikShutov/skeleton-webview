@@ -19,33 +19,49 @@ export default class CameraControlService implements ControlServiceInterface {
   }
 
   public forward(): void {
-    SocketService.socket.emit("pushCommand", {
-      commandName: "CAMERA_UP",
-    });
+    SocketService.socket.emit(
+      "pushCommand",
+      {
+        commandName: "CAMERA_UP",
+      },
+      "MANUAL",
+    );
 
     console.log("[Camera] up");
   }
 
   public backward(): void {
-    SocketService.socket.emit("pushCommand", {
-      commandName: "CAMERA_DOWN",
-    });
+    SocketService.socket.emit(
+      "pushCommand",
+      {
+        commandName: "CAMERA_DOWN",
+      },
+      "MANUAL",
+    );
 
     console.log("[Camera] down");
   }
 
   public left(): void {
-    SocketService.socket.emit("pushCommand", {
-      commandName: "CAMERA_LEFT",
-    });
+    SocketService.socket.emit(
+      "pushCommand",
+      {
+        commandName: "CAMERA_LEFT",
+      },
+      "MANUAL",
+    );
 
     console.log("[Camera] left");
   }
 
   public right(): void {
-    SocketService.socket.emit("pushCommand", {
-      commandName: "CAMERA_RIGHT",
-    });
+    SocketService.socket.emit(
+      "pushCommand",
+      {
+        commandName: "CAMERA_RIGHT",
+      },
+      "MANUAL",
+    );
 
     console.log("[Camera] right");
   }

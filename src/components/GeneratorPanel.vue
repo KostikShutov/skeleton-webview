@@ -78,20 +78,6 @@
       </div>
     </div>
   </div>
-  <h3 class="text-center">Отправленные команды</h3>
-  <DataTable :value="commands" tableStyle="min-width: 50rem" showGridlines>
-    <Column field="id" header="Идентификатор"></Column>
-    <Column field="steering" header="Угол поворота [град]"></Column>
-    <Column field="speed" header="Скорость [м/с]"></Column>
-    <Column field="status" header="Статус" style="min-width: 200px">
-      <template #body="body">
-        <Tag
-          :value="getStatusText(body.data.status)"
-          :severity="getStatusSeverity(body.data.status)"
-        />
-      </template>
-    </Column>
-  </DataTable>
 </template>
 
 <style scoped>
@@ -104,7 +90,6 @@
 <script lang="ts">
 import { defineComponent, ref, Ref } from "vue";
 import SocketService from "@/services/SocketService";
-import State from "@/store/State";
 
 interface Init {
   config: {
@@ -121,10 +106,8 @@ interface Coordinate {
 }
 
 interface Command {
-  id?: string;
   steering: number;
   speed: number;
-  status?: string;
 }
 
 export default defineComponent({
@@ -153,45 +136,6 @@ export default defineComponent({
       maxIterations: 1000,
     };
   },
-  setup() {
-    const commands: Ref<Command[]> = ref([]);
-
-    const addCommand = (newCommand: Command) => {
-      commands.value.push(newCommand);
-    };
-
-    const modifyCommand = (id: string, status: string) => {
-      const index = commands.value.findIndex((row) => row.id === id);
-
-      if (index !== -1) {
-        commands.value[index].status = status;
-      }
-    };
-
-    const clearCommands = () => {
-      commands.value = [];
-    };
-
-    return {
-      commands,
-      addCommand,
-      modifyCommand,
-      clearCommands,
-    };
-  },
-  mounted() {
-    SocketService.socket.on("getCommand", (data) => {
-      try {
-        const parsedData: { id: string; status: string; state: State } =
-          JSON.parse(data);
-
-        this.modifyCommand(parsedData.id, parsedData.status);
-        console.log(parsedData);
-      } catch (error) {
-        console.error("Invalid json from get command event:", data);
-      }
-    });
-  },
   methods: {
     sendCommands(): void {
       try {
@@ -211,8 +155,6 @@ export default defineComponent({
       const predictedCoordinates: Array<Coordinate> = [];
 
       const doInitAndGenerate = async () => {
-        this.clearCommands();
-
         const response = await fetch(process.env.VUE_APP_INIT_HOST, {
           method: "POST",
           headers: {
@@ -286,7 +228,16 @@ export default defineComponent({
               yaw = this.normalizeAngle(yaw);
             }
 
-            this.pushCommand(command);
+            SocketService.socket.emit(
+              "pushCommand",
+              {
+                commandName: "MOVE",
+                steering: -command.steering,
+                speed: 60,
+                duration: this.duration,
+              },
+              "TRAJECTORY",
+            );
 
             predictedCoordinates.push({
               x: fromCoordinate.x,
@@ -333,29 +284,6 @@ export default defineComponent({
       };
 
       doInitAndGenerate();
-    },
-    pushCommand(command: Command) {
-      SocketService.socket.timeout(1000).emit(
-        "pushCommand",
-        {
-          commandName: "MOVE",
-          steering: -command.steering,
-          speed: 60,
-          duration: this.duration,
-        },
-        (err: unknown, id: string) => {
-          if (err) {
-            console.error(err);
-          } else {
-            this.addCommand({
-              id: id,
-              steering: command.steering,
-              speed: command.speed,
-              status: err ? "error" : "sent",
-            });
-          }
-        },
-      );
     },
     needCloserToNextCoordinate(
       fromCoordinate: Coordinate,
@@ -408,34 +336,6 @@ export default defineComponent({
       }
 
       return angle;
-    },
-    getStatusText(status: string): string | undefined {
-      switch (status) {
-        case "sent":
-          return "Отправлено";
-        case "success":
-          return "Успешно";
-        case "cancelled":
-          return "Отменено";
-        case "error":
-          return "Ошибка";
-        default:
-          return undefined;
-      }
-    },
-    getStatusSeverity(status: string): string | undefined {
-      switch (status) {
-        case "sent":
-          return "info";
-        case "success":
-          return "success";
-        case "cancelled":
-          return "warning";
-        case "error":
-          return "danger";
-        default:
-          return undefined;
-      }
     },
   },
 });

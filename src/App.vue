@@ -57,6 +57,11 @@ export default {
           icon: "pi pi-fw pi-upload",
           url: "/upload",
         },
+        {
+          label: "Очередь команд",
+          icon: "pi pi-fw pi-th-large",
+          url: "/timeline",
+        },
       ],
     };
   },

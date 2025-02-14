@@ -7,14 +7,13 @@ import Image from "primevue/image";
 import Badge from "primevue/badge";
 import InlineMessage from "primevue/inlinemessage";
 import Knob from "primevue/knob";
-import DataTable from "primevue/datatable";
-import Column from "primevue/column";
 import Textarea from "primevue/textarea";
 import Button from "primevue/button";
 import InputNumber from "primevue/inputnumber";
 import Dropdown from "primevue/dropdown";
 import Tag from "primevue/tag";
 import Menubar from "primevue/menubar";
+import Timeline from "primevue/timeline";
 import { createStore } from "vuex";
 import State from "@/store/State";
 import SocketService from "@/services/SocketService";
@@ -124,12 +123,11 @@ createApp(App)
   .component("Badge", Badge)
   .component("InlineMessage", InlineMessage)
   .component("Knob", Knob)
-  .component("DataTable", DataTable)
-  .component("Column", Column)
   .component("Textarea", Textarea)
   .component("Button", Button)
   .component("InputNumber", InputNumber)
   .component("Dropdown", Dropdown)
   .component("Tag", Tag)
   .component("Menubar", Menubar)
+  .component("Timeline", Timeline)
   .mount("#app");
