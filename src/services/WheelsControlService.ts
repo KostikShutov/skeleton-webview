@@ -27,19 +27,29 @@ export default class WheelsControlService implements ControlServiceInterface {
   }
 
   public forward(): void {
-    SocketService.socket.emit("pushCommand", {
-      commandName: "FORWARD",
-      speed: this.store.state.currentSpeed,
-    });
+    SocketService.socket.emit(
+      "pushCommand",
+      {
+        commandName: "FORWARD",
+        speed: this.store.state.currentSpeed,
+        duration: 0,
+      },
+      "MANUAL",
+    );
 
     console.log("[Wheels] forward");
   }
 
   public backward(): void {
-    SocketService.socket.emit("pushCommand", {
-      commandName: "BACKWARD",
-      speed: this.store.state.currentSpeed,
-    });
+    SocketService.socket.emit(
+      "pushCommand",
+      {
+        commandName: "BACKWARD",
+        speed: this.store.state.currentSpeed,
+        duration: 0,
+      },
+      "MANUAL",
+    );
 
     console.log("[Wheels] backward");
   }
@@ -54,7 +64,7 @@ export default class WheelsControlService implements ControlServiceInterface {
     this.doTurn(newAngle);
 
     console.log(
-      `[Wheels] left (oldAngle: ${currentAngle}, newAngle: ${newAngle})`
+      `[Wheels] left (oldAngle: ${currentAngle}, newAngle: ${newAngle})`,
     );
   }
 
@@ -68,15 +78,19 @@ export default class WheelsControlService implements ControlServiceInterface {
     this.doTurn(newAngle);
 
     console.log(
-      `[Wheels] right (oldAngle: ${currentAngle}, newAngle: ${newAngle})`
+      `[Wheels] right (oldAngle: ${currentAngle}, newAngle: ${newAngle})`,
     );
   }
 
   public stop(): void {
-    SocketService.socket.emit("pushCommand", {
-      commandName: "STOP",
-      duration: 0,
-    });
+    SocketService.socket.emit(
+      "pushCommand",
+      {
+        commandName: "STOP",
+        duration: 0,
+      },
+      "MANUAL",
+    );
 
     console.log("[Wheels] stop");
   }
@@ -86,10 +100,14 @@ export default class WheelsControlService implements ControlServiceInterface {
       if (err) {
         console.error("[Wheels] force stop", err);
       } else {
-        SocketService.socket.emit("pushCommand", {
-          commandName: "STOP",
-          duration: 0,
-        });
+        SocketService.socket.emit(
+          "pushCommand",
+          {
+            commandName: "STOP",
+            duration: 0,
+          },
+          "MANUAL",
+        );
 
         console.log("[Wheels] force stop");
       }
@@ -97,27 +115,39 @@ export default class WheelsControlService implements ControlServiceInterface {
   }
 
   public speedUp(): void {
-    SocketService.socket.emit("pushCommand", {
-      commandName: "SPEED",
-      speed: this.store.state.currentSpeed + 20,
-    });
+    SocketService.socket.emit(
+      "pushCommand",
+      {
+        commandName: "SPEED",
+        speed: this.store.state.currentSpeed + 20,
+      },
+      "MANUAL",
+    );
 
     console.log("[Wheels] speed up");
   }
 
   public speedDown(): void {
-    SocketService.socket.emit("pushCommand", {
-      commandName: "SPEED",
-      speed: this.store.state.currentSpeed - 20,
-    });
+    SocketService.socket.emit(
+      "pushCommand",
+      {
+        commandName: "SPEED",
+        speed: this.store.state.currentSpeed - 20,
+      },
+      "MANUAL",
+    );
 
     console.log("[Wheels] speed down");
   }
 
   private doTurn(newAngle: number): void {
-    SocketService.socket.emit("pushCommand", {
-      commandName: "TURN",
-      steering: newAngle,
-    });
+    SocketService.socket.emit(
+      "pushCommand",
+      {
+        commandName: "TURN",
+        steering: newAngle,
+      },
+      "MANUAL",
+    );
   }
 }

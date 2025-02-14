@@ -18,7 +18,6 @@
       @click.prevent="getConfig()"
     />
   </div>
-  <h3 class="text-center">Конфигурация</h3>
   <pre><code>{{ outputConfigAsXml }}</code></pre>
 </template>
 

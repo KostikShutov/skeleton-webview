@@ -1,16 +1,14 @@
 <template>
-  <div>
-    <input type="file" @change="onFileChange" />
-    <button @click="uploadFile">Загрузить</button>
-    <h3>Список файлов:</h3>
-    <ul>
-      <li v-for="file in files" :key="file">
-        {{ file }}
-        <button @click="downloadFile(file)">Скачать</button>
-        <button @click="deleteFile(file)">Удалить</button>
-      </li>
-    </ul>
-  </div>
+  <input type="file" @change="onFileChange" />
+  <button @click="uploadFile">Загрузить</button>
+  <h3>Список файлов:</h3>
+  <ul>
+    <li v-for="file in files" :key="file">
+      {{ file }}
+      <button @click="downloadFile(file)">Скачать</button>
+      <button @click="deleteFile(file)">Удалить</button>
+    </li>
+  </ul>
 </template>
 
 <script lang="ts">
