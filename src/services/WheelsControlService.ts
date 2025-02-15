@@ -32,7 +32,7 @@ export default class WheelsControlService implements ControlServiceInterface {
       {
         commandName: "FORWARD",
         speed: this.store.state.currentSpeed,
-        duration: 0,
+        duration: 1,
       },
       "MANUAL",
     );
@@ -46,7 +46,7 @@ export default class WheelsControlService implements ControlServiceInterface {
       {
         commandName: "BACKWARD",
         speed: this.store.state.currentSpeed,
-        duration: 0,
+        duration: 1,
       },
       "MANUAL",
     );
