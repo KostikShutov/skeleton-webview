@@ -4,6 +4,7 @@ import Generator from "../views/Generator.vue";
 import Config from "../views/Config.vue";
 import Upload from "../views/Upload.vue";
 import Timeline from "../views/Timeline.vue";
+import TimelineMini from "../views/TimelineMini.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -30,6 +31,12 @@ const routes: Array<RouteRecordRaw> = [
     path: "/timeline",
     name: "Очередь команд",
     component: Timeline,
+  },
+  {
+    path: "/timeline-mini",
+    name: "Очередь команд mini",
+    component: TimelineMini,
+    meta: { noLayout: true },
   },
 ];
 

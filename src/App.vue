@@ -1,20 +1,25 @@
 <template>
-  <Menubar :model="items">
-    <template #start>
-      <img
-        alt="logo"
-        :src="require('@/assets/water.jpg')"
-        height="40"
-        class="mr-2"
-      />
-    </template>
-  </Menubar>
-  <Card class="mt-2">
-    <template #title>{{ $route.name }}</template>
-    <template #content>
-      <router-view />
-    </template>
-  </Card>
+  <template v-if="$route.meta.noLayout">
+    <router-view />
+  </template>
+  <template v-else>
+    <Menubar :model="items">
+      <template #start>
+        <img
+          alt="logo"
+          :src="require('@/assets/water.jpg')"
+          height="40"
+          class="mr-2"
+        />
+      </template>
+    </Menubar>
+    <Card class="mt-2">
+      <template #title>{{ $route.name }}</template>
+      <template #content>
+        <router-view />
+      </template>
+    </Card>
+  </template>
 </template>
 
 <style>
