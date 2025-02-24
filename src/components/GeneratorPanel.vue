@@ -88,7 +88,7 @@
 </style>
 
 <script lang="ts">
-import { defineComponent, ref, Ref } from "vue";
+import { defineComponent } from "vue";
 import SocketService from "@/services/SocketService";
 
 interface Init {
