@@ -44,9 +44,22 @@ export default defineComponent({
   },
   methods: {
     sendConfig(): void {
-      SocketService.socket.emit("uploadConfig", {
-        xml: this.inputConfigAsXml,
-      });
+      SocketService.socket.timeout(1000).emit(
+        "uploadConfig",
+        {
+          xml: this.inputConfigAsXml,
+        },
+        (err: unknown, message: string) => {
+          if (err) {
+            console.log("Can not upload config");
+            console.error(err);
+
+            return;
+          }
+
+          this.outputConfigAsXml = message;
+        },
+      );
     },
     getConfig(): void {
       SocketService.socket
