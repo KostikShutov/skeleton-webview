@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import Home from "../views/Home.vue";
 import Generator from "../views/Generator.vue";
+import ShipGenerator from "../views/ShipGenerator.vue";
 import Config from "../views/Config.vue";
 import Upload from "../views/Upload.vue";
 import Timeline from "../views/Timeline.vue";
@@ -16,6 +17,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/generator",
     name: "Управление по траектории",
     component: Generator,
+  },
+  {
+    path: "/ship-generator",
+    name: "Управление по траектории (судно)",
+    component: ShipGenerator,
   },
   {
     path: "/config",
