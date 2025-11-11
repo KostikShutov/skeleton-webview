@@ -127,9 +127,9 @@ export default defineComponent({
       selectedModel: "ship",
       models: [{ name: "Ship", value: "ship" }],
       startYaw: undefined,
-      duration: 0.001,
-      errorRate: 0.001,
-      maxIterations: 1000,
+      duration: 0.1,
+      errorRate: 0.07,
+      maxIterations: 200,
     };
   },
   methods: {
